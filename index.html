@@ -3,13 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>:root{color-scheme:light}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{color-scheme:light}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
+.beta-note a { color: var(--indigo); font-weight: 600; }
+.privacy { background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; color: var(--ink); }
+.privacy h2 { font-size: 16px; margin-bottom: 6px; }
+.privacy ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 1.55; }
+.privacy a { color: var(--indigo); word-break: break-all; }
+</style>
 </head>
 <body>
 <title>한장 사주 베타</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
 <style>
 /* 레이아웃: 한 장짜리 명식 카드. 입력 → (경계 질문) → 명식 → 무료 풀이 → 자세히 보기(잠금) */
 :root {
@@ -23,8 +27,8 @@
   --seal: #b23a2b;       /* 인주 */
   --wood: #2f7d57; --fire: #c4452f; --earth: #b8892a; --metal: #8a929a; --water: #2b3d63;
   --ok: #2f7d57; --warn: #a8641a; --warn-soft: #f6ead8;
-  --display: "Nanum Myeongjo", "Noto Serif KR", "Batang", serif;
-  --body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --display: "Nanum Myeongjo", "AppleMyungjo", "Noto Serif KR", "Noto Serif CJK KR", "Batang", serif;
+  --body: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Noto Sans CJK KR", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --paper: #121715; --sheet: #1a201e; --ink: #e8ece9; --ink-2: #a6b0ab; --line: #2e3633;
@@ -255,7 +259,7 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
     <div class="seal" aria-hidden="true">命</div>
   </header>
 
-  <div class="beta-note"><strong>지인 테스트 버전</strong> 내 생년월일시를 넣고 탭을 하나씩 눌러 본 뒤, 맨 아래에서 의견을 보내 주세요. 입력한 정보는 어디에도 저장되지 않아요.</div>
+  <div class="beta-note"><strong>베타 테스트</strong> 생년월일시를 넣고 탭을 하나씩 눌러 본 뒤, 맨 아래에서 의견을 보내 주세요. <a href="#privacy">개인정보는 어떻게 되나요?</a></div>
 
   <div class="seg tabs" role="tablist" aria-label="보기">
     <button type="button" role="tab" id="tab-today" aria-pressed="true" aria-selected="true">오늘 운세</button>
@@ -324,7 +328,17 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
           </select></label>
       </div>
     </details>
-    <p>재미로 보는 풀이예요. 중요한 결정은 스스로 내려 주세요. 입력한 정보는 이 화면 밖으로 보내지 않아요.</p>
+    <section class="privacy" id="privacy">
+      <h2>개인정보 안내</h2>
+      <ul>
+        <li><strong>서버가 없어요.</strong> 사주 계산은 전부 지금 쓰고 있는 휴대폰(또는 PC) 브라우저 안에서 돌아가요.</li>
+        <li><strong>보내지도, 저장하지도 않아요.</strong> 입력한 생년월일시와 성별은 어디로도 전송되지 않고, 창을 닫으면 사라져요. 쿠키·로그인·분석 도구도 쓰지 않아요.</li>
+        <li><strong>의견 보내기도 직접 하는 거예요.</strong> "의견 복사하기"는 글을 만들어 복사만 해요. 생년월일은 들어가지 않고, 보낼지 말지는 직접 정해요.</li>
+        <li><strong>코드가 전부 공개돼 있어요.</strong> 직접 확인할 수 있어요: <a href="https://github.com/aceb2410/aceb2410.github.io" target="_blank" rel="noopener">github.com/aceb2410/aceb2410.github.io</a></li>
+        <li>사이트는 GitHub Pages에 올려져 있어서, 접속 기록(IP 등)은 다른 웹사이트처럼 GitHub 쪽에 남을 수 있어요.</li>
+      </ul>
+    </section>
+    <p>재미로 보는 풀이예요. 중요한 결정은 스스로 내려 주세요.</p>
   </footer>
 </main>
 
