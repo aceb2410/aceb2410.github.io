@@ -606,7 +606,7 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
     var d = it.detail;
     if (!d.dayStem) return '<p class="sub">일주가 정해지지 않아 자세한 풀이는 시간을 확인한 뒤 볼 수 있어요.</p>';
     var html = '<div class="reading">' +
-      (ij ? '<div class="detail-block"><h3>' + ij.name + ', 자세히</h3><dl>' +
+      (ij ? '<div class="detail-block"><h3>일주 풀이 · ' + ij.name + '</h3><dl>' +
         '<dt>연애</dt><dd>' + ij.love + '</dd><dt>일과 돈</dt><dd>' + ij.work + '</dd><dt>조심할 점</dt><dd>' + ij.care + '</dd></dl></div>' : '') +
       '<div class="detail-block"><h3>성격</h3><dl>' +
       '<dt>타고난 모습</dt><dd>' + d.dayStem.nature + '</dd><dt>강점</dt><dd>' + d.dayStem.good + '</dd><dt>조심할 점</dt><dd>' + d.dayStem.care + '</dd><dt>일과 돈</dt><dd>' + d.dayStem.work + '</dd></dl></div>' +
