@@ -73,12 +73,13 @@
       var chung = CHUNG[db] === br;
       if (chung) { love -= 1; tags.push('배우자 자리 충'); }
       years.push({ year: y, ganji: gz, age: y - birthY + 1, love: love, marry: marry, tags: tags, meet: meet, chung: chung,
-        stars: Math.max(0, Math.min(5, Math.round(love / 1.6))) });
+        stars: love <= 0 ? 1 : love <= 2 ? 2 : love <= 4 ? 3 : love <= 6 ? 4 : 5 });
     }
     var adult = function (yy) { return yy.age >= 20; };
-    var best = years.filter(function (x) { return x.love >= 3; }).sort(function (a, b) { return b.love - a.love || a.year - b.year; }).slice(0, 3)
+    /* 연애운 좋은 해 = 별 3개 이상인 해 (별점과 항상 맞게) */
+    var best = years.filter(function (x) { return x.stars >= 3; }).sort(function (a, b) { return b.love - a.love || a.year - b.year; }).slice(0, 3)
       .sort(function (a, b) { return a.year - b.year; });
-    var marryYear = years.filter(adult).filter(function (x) { return x.marry >= 3; }).sort(function (a, b) { return b.marry - a.marry || a.year - b.year; })[0] || null;
+    var marryYear = years.filter(adult).filter(function (x) { return x.marry >= 2 && x.stars >= 3; }).sort(function (a, b) { return b.marry - a.marry || a.year - b.year; })[0] || null;
     var thisYear = years[0];
 
     function yearText(x) {

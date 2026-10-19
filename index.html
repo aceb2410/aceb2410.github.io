@@ -378,6 +378,21 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
     $(p + '-solar').onclick = function () { setCal('solar'); };
     $(p + '-lunar').onclick = function () { setCal('lunar'); };
     $(p + '-unknown').onchange = function () { $(p + '-h').disabled = $(p + '-mi').disabled = this.checked; };
+    /* 고른 해·달에 맞게 일 수를 맞춘다 (양력 28~31일, 음력 29·30일) */
+    function syncDays() {
+      var yy = +$(p + '-y').value, mm = +$(p + '-m').value, sel = $(p + '-d'), cur = +sel.value, max;
+      if (cal === 'lunar') {
+        max = 30;
+        try { window.Manseryeok.lunarToSolar(yy, mm, 30, $(p + '-leap').checked); } catch (e) { max = 29; }
+      } else {
+        max = new Date(Date.UTC(yy, mm, 0)).getUTCDate();
+      }
+      if (sel.options.length !== max) { sel.innerHTML = opts(1, max, function (v) { return v + '일'; }); sel.value = Math.min(cur, max); }
+    }
+    $(p + '-y').addEventListener('change', syncDays); $(p + '-m').addEventListener('change', syncDays);
+    $(p + '-leap').addEventListener('change', syncDays);
+    $(p + '-solar').addEventListener('click', syncDays); $(p + '-lunar').addEventListener('click', syncDays);
+    syncDays();
     return function read() {
       return { calendar: cal, leap: $(p + '-leap').checked, y: +$(p + '-y').value, m: +$(p + '-m').value, d: +$(p + '-d').value,
         timeKnown: !$(p + '-unknown').checked, h: +$(p + '-h').value, mi: +$(p + '-mi').value };
@@ -592,10 +607,14 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
     return '<div class="lock"><div class="preview" aria-hidden="true">' + html + '</div>' + gate('pay', '광고 보고 자세히 보기', '일주 풀이 · 성격 · 돈과 일 · 올해와 내년 운') + '</div>';
   }
 
+  /* 받침에 따라 조사 고르기 */
+  function josa(word, withB, withoutB) { var c = word.charCodeAt(word.length - 1) - 0xac00; return (c >= 0 && c <= 11171 && c % 28) ? withB : withoutB; }
+
   /* ---------- 연애·결혼운 ---------- */
   function stars(n) { return '<span class="stars" aria-label="별 ' + n + '개">' + '★★★★★'.slice(0, n) + '<em>' + '★★★★★'.slice(n) + '</em></span>'; }
   function loveSection(love, lt) {
     var now = lt.now;
+    if (now.age < 16) return '<div class="love-free"><h3>연애 · 결혼운</h3><p class="sub">연애·결혼운은 16세 이후부터 볼 수 있어요.</p></div>';
     var free = '<div class="love-free"><h3>연애 · 결혼운</h3><p>' + love.one + '</p>' +
       '<div class="lt-sum">' +
         '<div><span class="label">' + now.year + '년 연애운</span>' + stars(now.stars) + '</div>' +
@@ -683,7 +702,7 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
           '<div class="lk half"><span class="label">행운의 음식</span><span class="lv">' + lk.food + '</span></div>' +
           '<div class="lk wide"><span class="label">행운의 시간</span><span class="lv">' + lk.time + '</span></div>' +
         '</div>' +
-        '<p class="sub">오늘 일진 ' + t.ganji + '이 내 일간에게 ' + t.tenGod + '이 되는 날이에요. 행운의 색과 방향은 오늘 나에게 필요한 ' + lk.element + ' 기운에서 골랐어요.</p>';
+        '<p class="sub">오늘 일진 ' + t.ganji + josa(t.ganji, '이', '가') + ' 내 일간에게 ' + t.tenGod + josa(t.tenGod, '이', '가') + ' 되는 날이에요. 행운의 색과 방향은 오늘 나에게 필요한 ' + lk.element + ' 기운에서 골랐어요.</p>';
     }
     var animals = window.SajuToday.byAnimal(state.todayOffset);
     var mine = res.yearBranch;

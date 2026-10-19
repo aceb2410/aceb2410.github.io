@@ -108,7 +108,7 @@
     var y = input.y, m = input.m, d = input.d;
     if (input.calendar === 'lunar') {
       try { var sd = M.lunarToSolar(y, m, d, !!input.leap); y = sd.year; m = sd.month; d = sd.day; }
-      catch (e) { return { status: 'invalid', message: '없는 음력 날짜예요. 윤달 여부를 확인해 주세요.' }; }
+      catch (e) { return { status: 'invalid', message: '음력 ' + m + '월 ' + d + '일' + (input.leap ? '(윤달)' : '') + '은 그해에 없는 날짜예요. 날짜나 윤달 체크를 확인해 주세요.' }; }
     } else if (!M.isValidSolarDate(y, m, d)) {
       return { status: 'invalid', message: '없는 날짜예요. 다시 확인해 주세요.' };
     }
@@ -141,10 +141,14 @@
     var v = verify(s, rule, p4);
 
     if (!input.resolved) {
-      /* 질문 기준: 시주·일주는 ±10분, 연주·월주(절입)는 ±60분 안에서 바뀌면 묻는다 */
+      /* 질문 기준
+       * - 10분 단위(예: 1시 20분)로 넣으면 대충 기억한 시간일 수 있어 넓게 묻는다: 시·일 ±10분, 절입 ±60분
+       * - 분까지(예: 1시 27분) 넣으면 정확한 기록으로 보고 바뀌는 순간에 아주 가까울 때만 묻는다: 시·일 ±2분, 절입 ±5분 */
+      var approx = s.mi % 10 === 0;
       var sw = findSwitches(s, rule, 60).filter(function (x) {
         var big = x.changed.some(function (c) { return c === '연주' || c === '월주'; });
-        return big || Math.abs(x.offset) <= 10;
+        var lim = big ? (approx ? 60 : 5) : (approx ? 10 : 2);
+        return Math.abs(x.offset) <= lim;
       });
       if (sw.length) {
         var near = sw.slice().sort(function (a, b) { return Math.abs(a.offset) - Math.abs(b.offset); })[0];
