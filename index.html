@@ -2,6 +2,11 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<title>한장 사주 | 나의 사주와 매력 무료 체험</title>
+<meta name="description" content="생년월일로 내 사주와 매력, 두 사람의 궁합을 무료로 살펴보세요. 회원가입 없이 브라우저에서 계산합니다.">
+<meta property="og:title" content="한장 사주 — 나의 사주와 매력">
+<meta property="og:description" content="나는 어떤 매력을 가진 사람일까? 생년월일로 무료로 살펴보세요.">
+<meta property="og:type" content="website">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>:root{color-scheme:light}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}
 .beta-note a { color: var(--indigo); font-weight: 600; }
@@ -12,8 +17,7 @@
 </style>
 </head>
 <body>
-<title>한장 사주 베타</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+
 <style>
 /* 레이아웃: 한 장짜리 명식 카드. 입력 → (경계 질문) → 명식 → 무료 풀이 → 자세히 보기(잠금) */
 :root {
@@ -137,7 +141,10 @@ details summary { cursor: pointer; }
 details .row { margin-top: 8px; }
 .example-tag { font-size: 11px; color: var(--seal); border: 1px solid var(--seal); border-radius: 4px; padding: 0 6px; margin-left: 6px; font-family: var(--body); font-weight: 600; vertical-align: middle; }
 @media (prefers-reduced-motion: no-preference) { .sheet.in { animation: rise .35s ease-out; } @keyframes rise { from { transform: translateY(6px); opacity: .6 } to { transform: none; opacity: 1 } } }
-.tabs { align-self: flex-start; }
+.tabs { align-self: stretch; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tabs button { min-width: 0; white-space: nowrap; }
+.field select { width: 100%; }
+@media (max-width: 420px) { input, select, textarea { font-size: 16px; } .sheet { padding: 16px; } }
 .tabs button { padding: 8px 20px; font-weight: 600; }
 .person { display: flex; flex-direction: column; gap: 12px; }
 #partner-fields { border-top: 1px dashed var(--line); padding-top: 16px; }
@@ -248,18 +255,19 @@ details .row { margin-top: 8px; }
 .fbq .seg button { padding: 7px 12px; }
 textarea { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 10px; font: inherit; color: var(--ink); resize: vertical; width: 100%; }
 .fb-out { white-space: pre-wrap; background: var(--paper); border: 1px dashed var(--line); border-radius: 8px; padding: 12px; font-size: 13px; margin: 0; user-select: all; }
+@media (max-width: 420px) { .tabs button { padding: 10px 4px; font-size: 14px; } input, select, textarea { font-size: 16px; } }
 </style>
 
 <main>
   <header class="masthead">
     <div>
       <h1>한장 사주</h1>
-      <p>생년월일시로 여덟 글자를 뽑고, 두 가지 방법으로 맞춰 봅니다.</p>
+      <p>내 사주에 담긴 나만의 매력을 살펴보세요.</p>
     </div>
     <div class="seal" aria-hidden="true">命</div>
   </header>
 
-  <div class="beta-note"><strong>베타 테스트</strong> 생년월일시를 넣고 탭을 하나씩 눌러 본 뒤, 맨 아래에서 의견을 보내 주세요. <a href="#privacy">개인정보는 어떻게 되나요?</a></div>
+  <div class="beta-note"><strong>무료 체험</strong> 회원가입 없이 사주·매력·궁합을 볼 수 있어요. 태어난 시간을 몰라도 괜찮아요. <a href="#privacy">입력 정보 안내</a></div>
 
   <div class="seg tabs" role="tablist" aria-label="보기">
     <button type="button" role="tab" id="tab-today" aria-pressed="true" aria-selected="true">오늘 운세</button>
@@ -271,13 +279,13 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
   <form class="sheet" id="form" novalidate>
     <div class="person" id="me-fields"></div>
     <div class="person" id="partner-fields" hidden></div>
-    <p class="error" id="err" hidden></p>
+    <p class="error" id="err" role="alert" hidden></p>
     <button class="primary" type="submit" id="go">오늘 운세 보기</button>
   </form>
 
   <section class="ask" id="ask" hidden aria-live="polite"></section>
 
-  <section class="sheet" id="result" aria-live="polite"></section>
+  <section class="sheet" id="result" role="tabpanel" aria-live="polite" aria-labelledby="tab-charm"></section>
 
   <section class="sheet fb" id="fb">
     <h2>써 보니 어땠어요?</h2>
@@ -294,11 +302,11 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
         <button type="button" data-v="매력" aria-pressed="false">매력</button>
         <button type="button" data-v="궁합" aria-pressed="false">궁합</button>
       </div></div>
-    <div class="fbq"><span class="label">광고 보고 열기, 참을 만했어요?</span>
-      <div class="seg" role="group" aria-label="광고" id="fb-ad">
-        <button type="button" data-v="괜찮아요" aria-pressed="false">괜찮아요</button>
-        <button type="button" data-v="좀 귀찮아요" aria-pressed="false">좀 귀찮아요</button>
-        <button type="button" data-v="안 열어 봤어요" aria-pressed="false">안 열어 봤어요</button>
+    <div class="fbq"><span class="label">풀이 설명은 이해하기 쉬웠어요?</span>
+      <div class="seg" role="group" aria-label="설명의 이해도" id="fb-ease">
+        <button type="button" data-v="쉬웠어요" aria-pressed="false">쉬웠어요</button>
+        <button type="button" data-v="보통이에요" aria-pressed="false">보통이에요</button>
+        <button type="button" data-v="어려웠어요" aria-pressed="false">어려웠어요</button>
       </div></div>
     <label class="field fbq"><span class="label">한 줄 의견 (뭐가 좋았고 뭐가 이상했는지)</span>
       <textarea id="fb-text" rows="3" placeholder="예: 매력 리포트는 캡처하고 싶었는데, 궁합 점수가 너무 높게 나와요"></textarea></label>
@@ -331,7 +339,7 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
     <section class="privacy" id="privacy">
       <h2>개인정보 안내</h2>
       <ul>
-        <li><strong>서버가 없어요.</strong> 사주 계산은 전부 지금 쓰고 있는 휴대폰(또는 PC) 브라우저 안에서 돌아가요.</li>
+        <li><strong>입력 정보는 브라우저에서 계산해요.</strong> 사주 계산은 전부 지금 쓰고 있는 휴대폰(또는 PC) 브라우저 안에서 돌아가요.</li>
         <li><strong>보내지도, 저장하지도 않아요.</strong> 입력한 생년월일시와 성별은 어디로도 전송되지 않고, 창을 닫으면 사라져요. 쿠키·로그인·분석 도구도 쓰지 않아요.</li>
         <li><strong>의견 보내기도 직접 하는 거예요.</strong> "의견 복사하기"는 글을 만들어 복사만 해요. 생년월일은 들어가지 않고, 보낼지 말지는 직접 정해요.</li>
         <li><strong>코드가 전부 공개돼 있어요.</strong> 직접 확인할 수 있어요: <a href="https://github.com/aceb2410/aceb2410.github.io" target="_blank" rel="noopener">github.com/aceb2410/aceb2410.github.io</a></li>
@@ -357,7 +365,7 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
   var E = window.SajuEngine, C = window.SajuContent, L = window.SajuLove, M = window.Manseryeok, X = window.SajuExtras, IJ = window.SajuIlju;
   var $ = function (id) { return document.getElementById(id); };
   var HAN_G = '甲乙丙丁戊己庚辛壬癸', HAN_Z = '子丑寅卯辰巳午未申酉戌亥';
-  var THIS_YEAR = new Date().getFullYear();
+  var THIS_YEAR = window.SajuToday.seoulDate(0).y;
   var state = { tab: 'today', todayOffset: 0, unlocked: false, unlockedLove: false, example: true, resolve: { me: null, partner: null } };
 
   /* ---------- 입력 칸 (나 / 상대 같은 모양) ---------- */
@@ -373,7 +381,7 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
         '<label class="check" id="' + p + '-leap-wrap" hidden><input type="checkbox" id="' + p + '-leap"> 윤달</label>' +
       '</div>' +
       '<div class="date-grid">' +
-        '<label class="field"><span class="label">년</span><select id="' + p + '-y">' + opts(1920, 2100, function (v) { return v + '년'; }) + '</select></label>' +
+        '<label class="field"><span class="label">년</span><select id="' + p + '-y">' + opts(1920, THIS_YEAR, function (v) { return v + '년'; }) + '</select></label>' +
         '<label class="field"><span class="label">월</span><select id="' + p + '-m">' + opts(1, 12, function (v) { return v + '월'; }) + '</select></label>' +
         '<label class="field"><span class="label">일</span><select id="' + p + '-d">' + opts(1, 31, function (v) { return v + '일'; }) + '</select></label>' +
       '</div>' +
@@ -382,7 +390,7 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
         '<label class="field"><span class="label">분</span><select id="' + p + '-mi">' + opts(0, 59, function (v) { return E.pad(v) + '분'; }) + '</select></label>' +
       '</div>' +
       '<label class="check"><input type="checkbox" id="' + p + '-unknown"> 태어난 시간을 몰라요</label>' +
-      (p === 'me' ? '<label class="field"><span class="label">성별 (대운 계산에만 써요)</span><select id="me-gender"><option value="">선택 안 함</option><option value="male">남</option><option value="female">여</option></select></label>' : '');
+      (p === 'me' ? '<label class="field"><span class="label">성별 (선택 · 대운과 연애운 풀이에 사용)</span><select id="me-gender"><option value="">선택 안 함</option><option value="male">남</option><option value="female">여</option></select></label>' : '');
     $(p + '-y').value = def.y; $(p + '-m').value = def.m; $(p + '-d').value = def.d;
     $(p + '-h').value = def.h; $(p + '-mi').value = def.mi;
     if (def.gender) $(p + '-gender').value = def.gender;
@@ -412,13 +420,14 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
         timeKnown: !$(p + '-unknown').checked, h: +$(p + '-h').value, mi: +$(p + '-mi').value };
     };
   }
-  var readMe = buildFields('me', '나', { y: 1989, m: 8, d: 15, h: 14, mi: 20, gender: 'male' });
+  var readMe = buildFields('me', '나', { y: 1997, m: 8, d: 15, h: 14, mi: 20, unknown: true });
   var readPartner = buildFields('partner', '상대', { y: 1991, m: 3, d: 2, h: 12, mi: 0, unknown: true });
 
   /* ---------- 탭 ---------- */
   function setTab(t) {
     state.tab = t;
-    ['today', 'me', 'charm', 'love'].forEach(function (k) { $('tab-' + k).setAttribute('aria-pressed', t === k); $('tab-' + k).setAttribute('aria-selected', t === k); });
+    ['today', 'me', 'charm', 'love'].forEach(function (k) { $('tab-' + k).setAttribute('aria-pressed', t === k); $('tab-' + k).setAttribute('aria-selected', t === k); $('tab-' + k).setAttribute('aria-controls', 'result'); $('tab-' + k).tabIndex = t === k ? 0 : -1; });
+    $('result').setAttribute('aria-labelledby', 'tab-' + t);
     $('partner-fields').hidden = t !== 'love'; $('me-title').hidden = t !== 'love';
     $('go').textContent = t === 'love' ? '궁합 보기' : t === 'today' ? '오늘 운세 보기' : t === 'charm' ? '매력 보기' : '사주 보기';
     refresh();
@@ -427,6 +436,14 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
   $('tab-me').onclick = function () { setTab('me'); };
   $('tab-charm').onclick = function () { setTab('charm'); };
   $('tab-love').onclick = function () { setTab('love'); };
+  var tabNames = ['today', 'me', 'charm', 'love'];
+  tabNames.forEach(function (name, index) {
+    $('tab-' + name).addEventListener('keydown', function (event) {
+      var next = event.key === 'ArrowRight' ? (index + 1) % 4 : event.key === 'ArrowLeft' ? (index + 3) % 4 : event.key === 'Home' ? 0 : event.key === 'End' ? 3 : null;
+      if (next === null) return;
+      event.preventDefault(); setTab(tabNames[next]); $('tab-' + tabNames[next]).focus();
+    });
+  });
 
   function rule() { return { longitude: parseFloat($('rule-lon').value), dayBoundary: $('rule-day').value }; }
   function basisText() {
@@ -435,11 +452,11 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
     var day = { midnight: '날짜는 자정 기준', jasi: '날짜는 밤 11시 기준', splitJasi: '밤 11시대는 날은 그대로, 시만 다음 날' }[r.dayBoundary];
     $('basis').textContent = '계산 기준: 한국천문연구원 절기 시각, 과거 서머타임 반영, ' + lon + ', ' + day + '.';
   }
-  $('me-gender').onchange = function () { if (state.tab === 'me') refresh(); };
+  $('me-gender').onchange = function () { if (state.tab === 'me' || state.tab === 'charm') refresh(); };
   $('rule-lon').onchange = $('rule-day').onchange = function () { basisText(); state.resolve = { me: null, partner: null }; refresh(); };
 
   $('form').addEventListener('submit', function (e) {
-    e.preventDefault(); state.example = false; state.unlocked = false; state.unlockedLove = false;
+    e.preventDefault(); state.example = false; state.unlocked = false; state.unlockedLove = false; state.unlockedLT = false; state.unlockedCharm = false;
     state.resolve = { me: null, partner: null };
     refresh();
   });
@@ -451,6 +468,12 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
     var r = state.resolve[who];
     if (r && r.key === JSON.stringify(input)) { input = Object.assign({}, input, r.ans); }
     var res = E.compute(input, rule());
+    if (res.solar) {
+      var today = window.SajuToday.seoulDate(0), birth = res.solar;
+      if (birth.y * 10000 + birth.m * 100 + birth.d > today.y * 10000 + today.m * 100 + today.d) {
+        return { status: 'invalid', message: '생년월일은 오늘 또는 이전 날짜로 입력해 주세요.' };
+      }
+    }
     res.thisYear = THIS_YEAR;
     return res;
   }
@@ -529,9 +552,9 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
   }
   function dateText(res) { var s = res.solar; return s.y + '년 ' + s.m + '월 ' + s.d + '일 (양력)' + (res.time ? ' ' + timeLabel(res.time) : ' 시간 모름'); }
   function isHold(res) { return res.verify && res.verify.done && !res.verify.ok && !res.verify.ambiguousTime; }
-  function animateIn() { var r = $('result'); r.classList.remove('in'); void r.offsetWidth; r.classList.add('in'); }
+  function animateIn() { var r = $('result'); if (state.example) r.insertAdjacentHTML('afterbegin', '<p class="note">아래는 예시 결과예요. 위에서 본인 정보를 입력한 뒤 보기 버튼을 눌러 주세요.</p>'); r.classList.remove('in'); void r.offsetWidth; r.classList.add('in'); }
   function gate(id, label, items) {
-    return '<div class="gate"><button class="pay" type="button" id="' + id + '">' + label + '</button><small>' + items + '<br>광고 한 편이면 열려요. 시제품이라 3초 기다리면 열려요</small></div>';
+    return '<div class="gate"><button class="pay" type="button" id="' + id + '">' + label + '</button><small>' + items + '<br>무료 체험에서는 바로 열어볼 수 있어요.</small></div>';
   }
 
   /* ---------- 지장간 · 12운성 · 12신살 ---------- */
@@ -597,8 +620,8 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
     function centerStrips() { document.querySelectorAll('.strip').forEach(function (st) { var c = st.querySelector('.cur'); if (c) st.scrollLeft = c.offsetLeft - st.offsetLeft - st.clientWidth / 2 + c.offsetWidth / 2; }); }
     centerStrips();
     var mz = $('manse'); if (mz) mz.addEventListener('toggle', function () { state.manseOpen = mz.open; if (mz.open) centerStrips(); });
-    var pay = $('pay'); if (pay) pay.onclick = function () { watchAd(function () { state.unlocked = true; renderMe(res); }); };
-    var payLt = $('pay-lt'); if (payLt) payLt.onclick = function () { watchAd(function () { state.unlockedLT = true; renderMe(res); }); };
+    var pay = $('pay'); if (pay) pay.onclick = function () { openDetail(function () { state.unlocked = true; renderMe(res); }); };
+    var payLt = $('pay-lt'); if (payLt) payLt.onclick = function () { openDetail(function () { state.unlockedLT = true; renderMe(res); }); };
     var tl = $('to-love'); if (tl) tl.onclick = function () { setTab('love'); $('partner-y').focus(); };
   }
 
@@ -618,7 +641,7 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
       (d.elements.length > 1 ? '<div class="detail-block"><h3>오행 더 보기</h3>' + d.elements.slice(1).map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div>' : '') +
       '</div>';
     if (state.unlocked) return '<span class="label">자세히 보기</span>' + html;
-    return '<div class="lock"><div class="preview" aria-hidden="true">' + html + '</div>' + gate('pay', '광고 보고 자세히 보기', '일주 풀이 · 성격 · 돈과 일 · 올해와 내년 운') + '</div>';
+    return '<div class="lock"><div class="preview" aria-hidden="true">' + html + '</div>' + gate('pay', '상세 풀이 무료로 보기', '일주 풀이 · 성격 · 돈과 일 · 올해와 내년 운') + '</div>';
   }
 
   /* 받침에 따라 조사 고르기 */
@@ -654,7 +677,7 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
           '<p>' + x.text + '</p>' + (x.meet && x.love >= 3 ? '<p class="sub">' + x.meet.who + ' · ' + x.meet.where + '</p>' : '') + '</div>';
       }).join('') + '</div></div></div>';
     var locked = state.unlockedLT ? detail
-      : '<div class="lock"><div class="preview" aria-hidden="true">' + detail + '</div>' + gate('pay-lt', '광고 보고 연애·결혼운 보기', '나와 맞는 사람 · 언제 누구를 만나나 · 10년 연애운') + '</div>';
+      : '<div class="lock"><div class="preview" aria-hidden="true">' + detail + '</div>' + gate('pay-lt', '연애·결혼운 무료로 보기', '나와 맞는 사람 · 언제 누구를 만나나 · 10년 연애운') + '</div>';
     return free + locked;
   }
 
@@ -683,10 +706,10 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
       (a.partial ? '<p class="sub">태어난 시간을 모르면 시주를 빼고 봐서 개수가 적게 나올 수 있어요.</p>' : '') +
       bars + '<hr>' +
       (state.unlockedCharm ? '<span class="label">하나씩 풀어 보기</span>' + detail
-        : '<div class="lock"><div class="preview" aria-hidden="true">' + detail + '</div>' + gate('pay-charm', '광고 보고 하나씩 풀어 보기', '도화 · 홍염 · 화개 · 귀인 · 배우자복 · 재물복 풀이') + '</div>') +
+        : '<div class="lock"><div class="preview" aria-hidden="true">' + detail + '</div>' + gate('pay-charm', '내 매력 하나씩 무료로 보기', '도화 · 홍염 · 화개 · 귀인 · 배우자복 · 재물복 풀이') + '</div>') +
       '<p class="sub">신살은 기준표가 책마다 조금씩 달라요. 이 앱은 가장 널리 쓰는 기준을 따랐어요.</p>';
     animateIn();
-    var p = $('pay-charm'); if (p) p.onclick = function () { watchAd(function () { state.unlockedCharm = true; renderCharm(res); }); };
+    var p = $('pay-charm'); if (p) p.onclick = function () { openDetail(function () { state.unlockedCharm = true; renderCharm(res); }); };
   }
 
   /* ---------- 오늘의 운세 ---------- */
@@ -759,23 +782,17 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
       '<div class="score"><span class="num">' + c.score + '</span><div><span class="band">' + c.band + '</span><div class="meter"><div style="width:' + c.score + '%"></div></div></div></div>' +
       '<div class="crows">' + rows + '</div><hr>' +
       (state.unlockedLove ? '<span class="label">궁합 자세히 보기</span>' + detail
-        : '<div class="lock"><div class="preview" aria-hidden="true">' + detail + '</div>' + gate('pay-love', '광고 보고 궁합 자세히 보기', '끌림 · 생활 · 각자의 연애 방식 · 조심할 점') + '</div>');
+        : '<div class="lock"><div class="preview" aria-hidden="true">' + detail + '</div>' + gate('pay-love', '궁합 상세 풀이 무료로 보기', '끌림 · 생활 · 각자의 연애 방식 · 조심할 점') + '</div>');
     animateIn();
-    var pay = $('pay-love'); if (pay) pay.onclick = function () { watchAd(function () { state.unlockedLove = true; renderLove(a, b); }); };
+    var pay = $('pay-love'); if (pay) pay.onclick = function () { openDetail(function () { state.unlockedLove = true; renderLove(a, b); }); };
   }
 
-  /* 광고 보기 (시제품: 실제 광고 대신 3초 화면) */
-  function watchAd(done) {
-    var ov = document.createElement('div'); ov.className = 'ad'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', '광고');
-    var n = 3;
-    ov.innerHTML = '<div class="ad-box"><span class="label">광고 자리</span><p>실제 앱에서는 여기서 보상형 광고가 나와요.</p><strong id="ad-n">' + n + '</strong></div>';
-    document.body.appendChild(ov);
-    var t = setInterval(function () { n--; var el = document.getElementById('ad-n'); if (el) el.textContent = n; if (n <= 0) { clearInterval(t); ov.remove(); done(); } }, 1000);
-  }
+  /* 무료 체험 상세 풀이: 대기나 광고 없이 바로 열기 */
+  function openDetail(done) { done(); }
 
   /* 의견 보내기: 저장하지 않고 글로 만들어 복사한다 */
   var fb = {};
-  ['fb-acc', 'fb-fav', 'fb-ad'].forEach(function (id) {
+  ['fb-acc', 'fb-fav', 'fb-ease'].forEach(function (id) {
     $(id).querySelectorAll('button').forEach(function (b) {
       b.onclick = function () { $(id).querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); fb[id] = b.getAttribute('data-v'); };
     });
@@ -787,7 +804,7 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
       '이름: ' + ($('fb-name').value.trim() || '익명') + '\n' +
       '맞는 정도: ' + (fb['fb-acc'] || '-') + '\n' +
       '재밌던 탭: ' + (fb['fb-fav'] || '-') + '\n' +
-      '광고: ' + (fb['fb-ad'] || '-') + '\n' +
+      '설명의 이해도: ' + (fb['fb-ease'] || '-') + '\n' +
       '내 일주: ' + ilju + '\n' +
       '의견: ' + ($('fb-text').value.trim() || '-');
     var out = $('fb-out'); out.textContent = txt; out.hidden = false;
@@ -799,7 +816,8 @@ textarea { background: var(--paper); border: 1px solid var(--line); border-radiu
   };
 
   basisText();
-  refresh();
+  var requestedView = new URLSearchParams(window.location.search).get('view');
+  setTab(tabNames.indexOf(requestedView) >= 0 ? requestedView : 'charm');
 
   /* 두 번째 계산(검증용)은 화면을 먼저 띄운 뒤 불러온다 */
   var sc = document.createElement('script');
